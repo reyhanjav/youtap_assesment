@@ -8,6 +8,7 @@ import 'package:youtap_assesment/core/injection/injection.dart';
 import 'package:youtap_assesment/features/televisions/application/television_review_bloc/television_review_bloc.dart';
 import 'package:youtap_assesment/features/televisions/domain/entity/television/television.dart';
 import 'package:youtap_assesment/widgets/read_more_text.dart';
+import 'package:youtap_assesment/widgets/reviews_shimmer.dart';
 
 class TelevisionDetailsPage extends StatefulWidget {
   const TelevisionDetailsPage({Key? key, required this.television})
@@ -97,9 +98,7 @@ class _TelevisionDetailsPageState extends State<TelevisionDetailsPage> {
                       loadInProgress: (_) => Column(
                             children: const [
                               Sizes.verticalSpaceMedium,
-                              Center(
-                                child: CircularProgressIndicator(),
-                              ),
+                              ReviewsShimmer()
                             ],
                           ),
                       loadSuccess: (value) {

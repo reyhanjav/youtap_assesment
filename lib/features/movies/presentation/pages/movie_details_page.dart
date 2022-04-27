@@ -8,6 +8,7 @@ import 'package:youtap_assesment/core/injection/injection.dart';
 import 'package:youtap_assesment/features/movies/application/movie_review_bloc/movie_review_bloc.dart';
 import 'package:youtap_assesment/features/movies/domain/entity/movie/movie.dart';
 import 'package:youtap_assesment/widgets/read_more_text.dart';
+import 'package:youtap_assesment/widgets/reviews_shimmer.dart';
 
 class MovieDetailsPage extends StatefulWidget {
   const MovieDetailsPage({Key? key, required this.movie}) : super(key: key);
@@ -94,93 +95,99 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                       loadInProgress: () => Column(
                             children: const [
                               Sizes.verticalSpaceMedium,
-                              Center(
-                                child: CircularProgressIndicator(),
-                              ),
+                              ReviewsShimmer()
                             ],
                           ),
                       loadSuccess: (value) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Sizes.verticalSpaceMedium,
-                            const Text(
-                              'Reviews',
-                              style: TextStyles.headline4,
-                            ),
-                            ListView.separated(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: value.length,
-                              separatorBuilder:
-                                  (BuildContext context, int index) {
-                                return Sizes.verticalSpaceSmall;
-                              },
-                              itemBuilder: (BuildContext context, int index) {
-                                return Card(
-                                  child: Padding(
-                                    padding: Sizes.v2h3Edge,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        ListTile(
-                                          contentPadding: Sizes.v1h2Edge,
-                                          dense: true,
-                                          leading: CircleAvatar(
-                                            radius: 18,
-                                            backgroundImage: NetworkImage(
-                                                'https://image.tmdb.org/t/p/w300${value[index].author?.avatarPath}'),
-                                          ),
-                                          title: Row(
-                                            children: [
-                                              Text(
-                                                value[index].author?.username ??
-                                                    '',
-                                                style: TextStyles.headline5,
-                                              ),
-                                              Sizes.horizontalSpaceSmall,
-                                              const Icon(
-                                                Icons.star,
-                                                color: Colors.amber,
-                                                size: 16,
-                                              ),
-                                              Sizes.horizontalSpaceIcon,
-                                              Text(
-                                                '${value[index].author?.rating ?? 0}',
-                                                style:
-                                                    TextStyles.greyTextStyle3,
-                                              )
-                                            ],
-                                          ),
-                                          subtitle: value[index].createdAt !=
-                                                  null
-                                              ? Text(
-                                                  Jiffy(value[index].createdAt,
-                                                          'yyyy-MM-dd')
-                                                      .fromNow(),
+                        return Visibility(
+                          visible: value.isNotEmpty,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Sizes.verticalSpaceMedium,
+                              const Text(
+                                'Reviews',
+                                style: TextStyles.headline4,
+                              ),
+                              ListView.separated(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: value.length,
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  return Sizes.verticalSpaceSmall;
+                                },
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Card(
+                                    child: Padding(
+                                      padding: Sizes.v2h3Edge,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          ListTile(
+                                            contentPadding: Sizes.v1h2Edge,
+                                            dense: true,
+                                            leading: CircleAvatar(
+                                              radius: 18,
+                                              backgroundImage: NetworkImage(
+                                                  'https://image.tmdb.org/t/p/w300${value[index].author?.avatarPath}'),
+                                            ),
+                                            title: Row(
+                                              children: [
+                                                Text(
+                                                  value[index]
+                                                          .author
+                                                          ?.username ??
+                                                      '',
+                                                  style: TextStyles.headline5,
+                                                ),
+                                                Sizes.horizontalSpaceSmall,
+                                                const Icon(
+                                                  Icons.star,
+                                                  color: Colors.amber,
+                                                  size: 16,
+                                                ),
+                                                Sizes.horizontalSpaceIcon,
+                                                Text(
+                                                  '${value[index].author?.rating ?? 0}',
                                                   style:
                                                       TextStyles.greyTextStyle3,
                                                 )
-                                              : Container(),
-                                        ),
-                                        Sizes.verticalSpaceSmall,
-                                        ReadMoreText(
-                                          value[index].content ?? '',
-                                          trimLines: 5,
-                                          style: TextStyles.primaryTextStyle,
-                                          colorClickableText: AppColor.primary,
-                                          trimMode: TrimMode.Line,
-                                          trimCollapsedText: ' ...See More',
-                                          trimExpandedText: ' See Less',
-                                        ),
-                                      ],
+                                              ],
+                                            ),
+                                            subtitle:
+                                                value[index].createdAt != null
+                                                    ? Text(
+                                                        Jiffy(
+                                                                value[index]
+                                                                    .createdAt,
+                                                                'yyyy-MM-dd')
+                                                            .fromNow(),
+                                                        style: TextStyles
+                                                            .greyTextStyle3,
+                                                      )
+                                                    : Container(),
+                                          ),
+                                          Sizes.verticalSpaceSmall,
+                                          ReadMoreText(
+                                            value[index].content ?? '',
+                                            trimLines: 5,
+                                            style: TextStyles.primaryTextStyle,
+                                            colorClickableText:
+                                                AppColor.primary,
+                                            trimMode: TrimMode.Line,
+                                            trimCollapsedText: ' ...See More',
+                                            trimExpandedText: ' See Less',
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         );
                       },
                       loadFailure: (_) {
