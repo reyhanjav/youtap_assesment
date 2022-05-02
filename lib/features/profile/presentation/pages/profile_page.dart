@@ -22,7 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _email() async {
     final Uri launchUri = Uri(
-      scheme: 'email',
+      scheme: 'mailto',
       path: 'reyhan.qartem@gmail.com',
     );
     await launchUrl(launchUri);
@@ -30,8 +30,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _github() async {
     final Uri launchUri = Uri(
-      scheme: 'url',
-      path: 'https://github.com/reyhanjav',
+      scheme: 'https',
+      host: 'github.com',
+      path: 'reyhanjav',
     );
     await launchUrl(launchUri);
   }
